@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TransformResponseInterceptor } from './core/interceptors/transform-response.interceptor';
 
 @Module({
   imports: [
@@ -15,6 +16,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: 'APP_INTERCEPTOR',
+    useClass: TransformResponseInterceptor,
+  }],
 })
-export class AppModule {}
+export class AppModule { }
