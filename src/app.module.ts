@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TransformResponseInterceptor } from './core/interceptors/transform-response.interceptor';
+import { LinksModule } from './modules/links/links.module';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { TransformResponseInterceptor } from './core/interceptors/transform-resp
         uri: configService.get<string>('connection_uri'),
       }),
       inject: [ConfigService],
-    }),
+    }), LinksModule
   ],
   controllers: [AppController],
   providers: [AppService, {
