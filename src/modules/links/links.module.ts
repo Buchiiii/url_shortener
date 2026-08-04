@@ -10,6 +10,7 @@ import { Counter, CounterSchema } from './entities/counter.entity';
   imports: [MongooseModule.forFeature([{ name: Link.name, schema: LinkSchema },
   { name: Counter.name, schema: CounterSchema }])],
   providers: [LinksService, HashGeneratorProvider],
-  controllers: [LinksController]
+  controllers: [LinksController],
+  exports: [LinksService]
 })
 export class LinksModule { }

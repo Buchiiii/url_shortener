@@ -57,4 +57,9 @@ export class LinksService {
         return record;
 
     }
+
+
+    public async getLinkByShortCode(shortCode: string): Promise<LinkDocument | null> {
+        return this.linkRepo.findOne({ short_code: shortCode });
+    }
 }
