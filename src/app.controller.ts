@@ -1,6 +1,5 @@
 import { Controller, Get, Param, Res } from '@nestjs/common';
 import type { Response } from 'express';
-import { AppService } from './app.service';
 import { LinksService } from './modules/links/links.service';
 
 @Controller()
