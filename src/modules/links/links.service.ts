@@ -6,10 +6,11 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { encodeBase62 } from '../../utils/encoder';
 import { Counter, CounterDocument } from './entities/counter.entity';
+import { CachingService } from 'src/core/caching/caching.service';
 
 @Injectable()
 export class LinksService {
-    constructor(private hashService: HashGeneratorProvider,
+    constructor(private hashService: HashGeneratorProvider, private cachingService: CachingService,
         @InjectModel(Link.name) private linkRepo: Model<LinkDocument>,
         @InjectModel(Counter.name) private counterRepo: Model<CounterDocument>
     ) { }
@@ -60,6 +61,31 @@ export class LinksService {
 
 
     public async getLinkByShortCode(shortCode: string): Promise<LinkDocument | null> {
-        return this.linkRepo.findOne({ short_code: shortCode });
+
+        const cachedLink = await this.cachingService.getFromCache<LinkDocument>(shortCode);
+        console.log("Cached Link:", cachedLink);
+
+        if (cachedLink) {
+            console.log("Cache hit for shortCode:", shortCode);
+            return cachedLink;
+        }
+
+        console.log("Cache Miss for shortCode:", shortCode);
+
+        const link = await this.linkRepo.findOne({ short_code: shortCode });
+
+        if (link) {
+            console.log("Setting cache for shortCode:", shortCode);
+            await this.cachingService.setToCache('buchi', 'buchi');
+            // await this.cachingService.testCache();
+            try {
+                const res = await this.cachingService.setToCache(shortCode, link.toObject());
+                console.error("Cache set result:", res);
+
+            } catch (error) {
+                console.log("Error setting cache:", error);
+            }
+        }
+        return link;
     }
 }

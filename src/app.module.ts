@@ -7,6 +7,7 @@ import { TransformResponseInterceptor } from './core/interceptors/transform-resp
 import { LinksModule } from './modules/links/links.module';
 import { LinksService } from './modules/links/links.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
         uri: configService.get<string>('connection_uri'),
       }),
       inject: [ConfigService],
-    }), LinksModule
+    }), LinksModule, CoreModule
   ],
   controllers: [AppController],
   providers: [AppService, {
