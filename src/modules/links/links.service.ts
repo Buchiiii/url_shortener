@@ -63,24 +63,24 @@ export class LinksService {
     public async getLinkByShortCode(shortCode: string): Promise<LinkDocument | null> {
 
         const cachedLink = await this.cachingService.getFromCache<LinkDocument>(shortCode);
-        console.log("Cached Link:", cachedLink);
+        // console.log("Cached Link:", cachedLink);
 
         if (cachedLink) {
-            console.log("Cache hit for shortCode:", shortCode);
+            // console.log("Cache hit for shortCode:", shortCode);
             return cachedLink;
         }
 
-        console.log("Cache Miss for shortCode:", shortCode);
+        // console.log("Cache Miss for shortCode:", shortCode);
 
         const link = await this.linkRepo.findOne({ short_code: shortCode });
 
         if (link) {
-            console.log("Setting cache for shortCode:", shortCode);
+            // console.log("Setting cache for shortCode:", shortCode);
             await this.cachingService.setToCache('buchi', 'buchi');
             // await this.cachingService.testCache();
             try {
                 const res = await this.cachingService.setToCache(shortCode, link.toObject());
-                console.error("Cache set result:", res);
+                // console.error("Cache set result:", res);
 
             } catch (error) {
                 console.log("Error setting cache:", error);

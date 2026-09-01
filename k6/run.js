@@ -14,6 +14,6 @@ export default function () {
 
 export function handleSummary(data) {
     return {
-        "stress-test-report2(Without Optimzation).html": htmlReport(data),
+        "stress-test-report(With Caching).html": htmlReport(data),
     };
 }
